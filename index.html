@@ -1,1 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WirelessBypassing - Secure Web Proxy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* PASSWORD SCREEN - SHOWS FIRST */
+        .password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #000 0%, #1a1a2e 50%, #000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .password-container {
+            text-align: center;
+            max-width: 450px;
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 25px;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #00ffff, #00ff88, #00ffff) 1;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.6);
+        }
+
+        .logo-section {
+            margin-bottom: 2rem;
+        }
+
+        .neon-icon {
+            font-size: 4rem;
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff, 0 0 45px #00ffff;
+            margin-right: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .neon-icon-secondary {
+            font-size: 3rem;
+            color: #00ff88;
+            text-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88;
+            animation: pulse 2s infinite 0.5s;
+        }
+
+        .neon-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+        }
+
+        .subtitle {
+            color: #bbb;
+            margin-bottom: 2.5rem;
+            font-size: 1.3rem;
+        }
+
+        .neon-input {
+            width: 100%;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #333;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .neon-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .neon-button {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            border: none;
+            border-radius: 15px;
+            color: #000;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .neon-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 35px rgba(0, 255, 255, 0.7);
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .security-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background: rgba(0, 255, 255, 0.15);
+            border-radius: 15px;
+            border: 2px solid rgba(0, 255, 255, 0.4);
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .feature span {
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        /* MAIN APP - HIDDEN BY DEFAULT */
+        .main-app {
+            display: none;
+            height: 100vh;
+            position: relative;
+        }
+
+        .main-app.show {
+            display: flex;
+        }
+
+        /* LEFT SIDEBAR - ALWAYS VISIBLE */
+        .left-sidebar {
+            width: 80px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-right: 4px solid #00ffff;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            z-index: 100;
+            box-shadow: 4px 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .left-sidebar.expanded {
+            width: 250px;
+        }
+
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 3px solid #333;
+            text-align: center;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .sidebar-toggle {
+            color: #00ffff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            color: #00ff88;
+            transform: scale(1.3);
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 2rem 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 1rem 0;
+            border-radius: 0 30px 30px 0;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 255, 255, 0.25);
+            border-left: 5px solid #00ffff;
+            transform: translateX(8px);
+        }
+
+        .menu-item i {
+            font-size: 2rem;
+            color: #888;
+            min-width: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover i {
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            transform: scale(1.2);
+        }
+
+        .menu-text {
+            margin-left: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .left-sidebar.expanded .menu-text {
+            opacity: 1;
+        }
+
+        /* MUSIC SIDEBAR */
+        .music-sidebar {
+            position: fixed;
+            right: -500px;
+            top: 0;
+            width: 500px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-left: 4px solid #00ff88;
+            z-index: 200;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -8px 0 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .music-sidebar.open {
+            right: 0;
+        }
+
+        .music-header {
+            padding: 2rem;
+            border-bottom: 4px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .music-header h3 {
+            color: #00ff88;
+            text-shadow: 0 0 20px #00ff88;
+            font-size: 2rem;
+        }
+
+        .music-header i {
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .music-header i:hover {
+            color: #ff6666;
+            transform: scale(1.3);
+            text-shadow: 0 0 15px #ff4444;
+        }
+
+        .music-tabs {
+            display: flex;
+            border-bottom: 3px solid #333;
+        }
+
+        .music-tab {
+            flex: 1;
+            padding: 1.5rem;
+            background: #2a2a2a;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 2px solid #333;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .music-tab:last-child {
+            border-right: none;
+        }
+
+        .music-tab.active {
+            background: rgba(0, 255, 136, 0.25);
+            color: #00ff88;
+            border-bottom: 4px solid #00ff88;
+        }
+
+        .music-tab:hover:not(.active) {
+            background: #333;
+            color: #fff;
+        }
+
+        .music-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .music-panel {
+            display: none;
+            padding: 2rem;
+        }
+
+        .music-panel.active {
+            display: block;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .music-search {
+            flex: 1;
+            padding: 1.2rem;
+            background: #333;
+            border: 3px solid #555;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .music-search:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .search-btn {
+            padding: 1.2rem 2rem;
+            background: linear-gradient(45deg, #00ff88, #00ffff);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.6);
+        }
+
+        .music-results {
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .placeholder-text {
+            text-align: center;
+            color: #888;
+            padding: 4rem;
+            font-style: italic;
+            font-size: 1.3rem;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 2px solid #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+        }
+
+        .music-item:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateX(8px);
+        }
+
+        .music-item img {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            margin-right: 1.5rem;
+        }
+
+        .music-info {
+            flex: 1;
+        }
+
+        .music-title {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .music-artist {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .music-player {
+            border-top: 4px solid #333;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .player-controls button {
+            background: rgba(0, 255, 136, 0.25);
+            border: 3px solid #00ff88;
+            color: #00ff88;
+            padding: 1.2rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .player-controls button:hover {
+            background: rgba(0, 255, 136, 0.5);
+            transform: scale(1.2);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.6);
+        }
+
+        .track-info {
+            text-align: center;
+        }
+
+        .track-info #trackTitle {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .track-info #trackArtist {
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(90deg, #00ffff, #00ff88, #00ffff);
+            padding: 4px;
+        }
+
+        .header-content {
+            background: #000;
+            margin: 3px;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .logo i:first-child {
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        .logo i:last-child {
+            color: #00ff88;
+            text-shadow: 0 0 15px #00ff88;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 68, 68, 0.25);
+            border: 3px solid #ff4444;
+            color: #ff4444;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 68, 68, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        /* TAB BAR */
+        .tab-bar {
+            background: #1a1a1a;
+            border-bottom: 3px solid #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .tabs-container {
+            flex: 1;
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            min-width: 250px;
+            max-width: 350px;
+            background: #2a2a2a;
+            border-right: 2px solid #333;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(0, 255, 136, 0.25));
+            border-bottom: 4px solid #00ffff;
+        }
+
+        .tab:hover:not(.active) {
+            background: #333;
+        }
+
+        .tab-icon {
+            color: #888;
+            margin-right: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .tab-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 1.1rem;
+        }
+
+        .tab-close {
+            color: #888;
+            margin-left: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-close:hover {
+            background: rgba(255, 68, 68, 0.4);
+            color: #ff4444;
+        }
+
+        .add-tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 1.5rem;
+            cursor: pointer;
+            border-left: 2px solid #333;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .add-tab-btn:hover {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.15);
+        }
+
+        /* ADDRESS BAR */
+        .address-bar {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-bottom: 3px solid #333;
+        }
+
+        .address-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 1.2rem;
+            background: #2a2a2a;
+            border: 3px solid #444;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .go-button {
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .go-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
+        }
+
+        /* CONTENT AREA */
+        .content-area {
+            flex: 1;
+            padding: 1.5rem;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        .browser-frame {
+            height: 100%;
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 3px solid #333;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .welcome-screen {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .welcome-content {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .welcome-logo {
+            margin-bottom: 3rem;
+        }
+
+        .neon-icon-large {
+            font-size: 6rem;
+            color: #00ffff;
+            text-shadow: 0 0 40px #00ffff;
+            margin-right: 2rem;
+            animation: pulse 3s infinite;
+        }
+
+        .neon-icon-medium {
+            font-size: 5rem;
+            color: #00ff88;
+            text-shadow: 0 0 35px #00ff88;
+            animation: pulse 3s infinite 1s;
+        }
+
+        .welcome-title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-subtitle {
+            color: #888;
+            font-size: 1.6rem;
+            margin-bottom: 4rem;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .welcome-input {
+            flex: 1;
+            padding: 1.5rem;
+            background: #2a2a2a;
+            border: 3px solid #444;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .welcome-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+        }
+
+        .welcome-button {
+            padding: 1.5rem 2.5rem;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            border: none;
+            border-radius: 15px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .welcome-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 3px solid #333;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.4);
+            transform: translateY(-10px);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card:first-child i {
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .feature-card:last-child i {
+            color: #00ff88;
+            text-shadow: 0 0 20px #00ff88;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        .proxy-content {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: none;
+            overflow: auto;
+        }
+
+        .proxy-content.show {
+            display: block;
+        }
+
+        /* STATUS BAR */
+        .status-bar {
+            background: #1a1a1a;
+            border-top: 3px solid #333;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            color: #888;
+        }
+
+        .status-left {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .proxy-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 15px #00ff88;
+        }
+
+        /* ANIMATIONS */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .left-sidebar {
+                width: 70px;
+            }
+            .left-sidebar.expanded {
+                width: 220px;
+            }
+            .music-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            .password-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            .neon-title {
+                font-size: 2.5rem;
+            }
+            .security-features {
+                grid-template-columns: 1fr;
+            }
+            .tab {
+                min-width: 200px;
+            }
+            .welcome-title {
+                font-size: 3rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ffff;
+        }
+
+        /* HIDDEN */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- PASSWORD SCREEN - SHOWS FIRST -->
+    <div id="passwordScreen" class="password-screen">
+        <div class="password-container">
+            <div class="logo-section">
+                <i class="fas fa-shield-alt neon-icon"></i>
+                <i class="fas fa-globe neon-icon-secondary"></i>
+            </div>
+            <h1 class="neon-title">WirelessBypassing</h1>
+            <p class="subtitle">Secure Access Required</p>
+            
+            <div class="password-form">
+                <input type="password" id="passwordInput" placeholder="Enter access code..." class="neon-input" autocomplete="off">
+                <button onclick="checkPassword()" class="neon-button">
+                    <i class="fas fa-unlock"></i> ACCESS
+                </button>
+            </div>
+            
+            <div id="passwordError" class="error-message"></div>
+            
+            <div class="security-features">
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <span>Encrypted Connection</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Anonymous Browsing</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP - HIDDEN BY DEFAULT -->
+    <div id="mainApp" class="main-app">
+        <!-- LEFT SIDEBAR NAVIGATION -->
+        <div class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-bars sidebar-toggle" onclick="toggleLeftSidebar()"></i>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item" onclick="openGames()" title="Games">
+                    <i class="fas fa-gamepad"></i>
+                    <span class="menu-text">Games</span>
+                </div>
+                <div class="menu-item" onclick="toggleMusicSidebar()" title="Music">
+                    <i class="fas fa-music"></i>
+                    <span class="menu-text">Music</span>
+                </div>
+                <div class="menu-item" onclick="openMovies()" title="Movies">
+                    <i class="fas fa-film"></i>
+                    <span class="menu-text">Movies</span>
+                </div>
+                <div class="menu-item" onclick="openTools()" title="Tools">
+                    <i class="fas fa-tools"></i>
+                    <span class="menu-text">Tools</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MUSIC SIDEBAR -->
+        <div class="music-sidebar" id="musicSidebar">
+            <div class="music-header">
+                <h3>Music Player</h3>
+                <i class="fas fa-times" onclick="closeMusicSidebar()"></i>
+            </div>
+            <div class="music-tabs">
+                <button class="music-tab active" onclick="switchMusicTab('youtube')">YouTube</button>
+                <button class="music-tab" onclick="switchMusicTab('spotify')">Spotify</button>
+            </div>
+            <div class="music-content">
+                <div id="youtubeMusic" class="music-panel active">
+                    <div class="search-section">
+                        <input type="text" id="youtubeSearch" placeholder="Search YouTube Music..." class="music-search">
+                        <button onclick="searchYouTube()" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="youtubeResults" class="music-results">
+                        <div class="placeholder-text">Search for music on YouTube</div>
+                    </div>
+                </div>
+                <div id="spotifyMusic" class="music-panel">
+                    <div class="search-section">
+                        <input type="text" id="spotifySearch" placeholder="Search Spotify..." class="music-search">
+                        <button onclick="searchSpotify()" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="spotifyResults" class="music-results">
+                        <div class="placeholder-text">Search for music on Spotify</div>
+                    </div>
+                </div>
+            </div>
+            <div class="music-player" id="musicPlayer">
+                <div class="player-controls">
+                    <button onclick="previousTrack()"><i class="fas fa-step-backward"></i></button>
+                    <button onclick="togglePlay()" id="playBtn"><i class="fas fa-play"></i></button>
+                    <button onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
+                </div>
+                <div class="track-info">
+                    <div id="trackTitle">No track selected</div>
+                    <div id="trackArtist"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content" id="mainContent">
+            <!-- HEADER -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-globe"></i>
+                        <h1>WirelessBypassing</h1>
+                    </div>
+                    <div class="header-info">
+                        <span>Secure Web Proxy</span>
+                        <button onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- TAB BAR -->
+            <div class="tab-bar">
+                <div class="tabs-container" id="tabsContainer">
+                    <!-- Tabs will be dynamically added here -->
+                </div>
+                <button onclick="addNewTab()" class="add-tab-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- ADDRESS BAR -->
+            <div class="address-bar">
+                <div class="address-container">
+                    <input type="text" id="urlInput" placeholder="Enter URL or search query..." class="url-input">
+                    <button onclick="navigateToUrl()" class="go-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="content-area">
+                <div id="browserFrame" class="browser-frame">
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <div class="welcome-content">
+                            <div class="welcome-logo">
+                                <i class="fas fa-shield-alt neon-icon-large"></i>
+                                <i class="fas fa-globe neon-icon-medium"></i>
+                            </div>
+                            <h2 class="welcome-title">WirelessBypassing</h2>
+                            <p class="welcome-subtitle">Secure Web Proxy & Bypass Tool</p>
+                            
+                            <div class="search-section">
+                                <input type="text" id="welcomeSearch" placeholder="Enter URL or search query..." class="welcome-input">
+                                <button onclick="searchFromWelcome()" class="welcome-button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+
+                            <div class="features-grid">
+                                <div class="feature-card">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <h3>Secure</h3>
+                                    <p>Encrypted proxy connection</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-user-secret"></i>
+                                    <h3>Anonymous</h3>
+                                    <p>Browse without tracking</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="proxyContent" class="proxy-content">
+                        <!-- This will contain the proxied content -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATUS BAR -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <span>Status: Connected</span>
+                    <span class="proxy-status">
+                        <div class="status-dot"></div>
+                        Proxy Active
+                    </span>
+                </div>
+                <div class="status-right" id="statusRight">
+                    <span id="currentSite"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GLOBAL VARIABLES
+        let tabs = []
+        let activeTabId = null
+        let tabCounter = 1
+        let isPlaying = false
+
+        // INITIALIZE ON PAGE LOAD
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("🚀 WirelessBypassing Loading...")
+            initializePasswordScreen()
+        })
+
+        // PASSWORD SCREEN FUNCTIONS
+        function initializePasswordScreen() {
+            const passwordScreen = document.getElementById("passwordScreen")
+            const mainApp = document.getElementById("mainApp")
+
+            // ENSURE PASSWORD SCREEN IS VISIBLE
+            passwordScreen.style.display = "flex"
+            mainApp.style.display = "none"
+
+            // FOCUS ON PASSWORD INPUT
+            setTimeout(() => {
+                document.getElementById("passwordInput").focus()
+            }, 200)
+
+            // ADD ENTER KEY LISTENER
+            document.getElementById("passwordInput").addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    checkPassword()
+                }
+            })
+
+            console.log("🔒 Password screen initialized")
+        }
+
+        function checkPassword() {
+            const passwordInput = document.getElementById("passwordInput")
+            const errorDiv = document.getElementById("passwordError")
+            const password = passwordInput.value.toLowerCase().trim()
+
+            console.log("🔑 Checking password:", password)
+
+            if (password === "welovepeople") {
+                console.log("✅ Password CORRECT - Showing main app")
+                localStorage.setItem("wirelessbypassing_auth", "true")
+                showMainApp()
+                errorDiv.textContent = ""
+            } else {
+                console.log("❌ Password INCORRECT")
+                errorDiv.textContent = "❌ Invalid access code. Please try again."
+                passwordInput.value = ""
+                passwordInput.focus()
+
+                // SHAKE ANIMATION
+                passwordInput.style.animation = "shake 0.5s"
+                setTimeout(() => {
+                    passwordInput.style.animation = ""
+                }, 500)
+            }
+        }
+
+        function showMainApp() {
+            const passwordScreen = document.getElementById("passwordScreen")
+            const mainApp = document.getElementById("mainApp")
+
+            passwordScreen.style.display = "none"
+            mainApp.style.display = "flex"
+            mainApp.classList.add("show")
+
+            console.log("🎉 Main app SHOWN")
+            initializeApp()
+        }
+
+        function logout() {
+            console.log("🚪 Logging out")
+            localStorage.removeItem("wirelessbypassing_auth")
+            tabs = []
+            activeTabId = null
+            tabCounter = 1
+
+            const passwordScreen = document.getElementById("passwordScreen")
+            const mainApp = document.getElementById("mainApp")
+
+            passwordScreen.style.display = "flex"
+            mainApp.style.display = "none"
+            mainApp.classList.remove("show")
+
+            document.getElementById("passwordInput").focus()
+            document.getElementById("passwordInput").value = ""
+            document.getElementById("passwordError").textContent = ""
+        }
+
+        // INITIALIZE MAIN APPLICATION
+        function initializeApp() {
+            console.log("⚡ Initializing main app")
+
+            // CREATE INITIAL TAB
+            if (tabs.length === 0) {
+                addNewTab()
+            }
+
+            // SET UP EVENT LISTENERS
+            document.getElementById("urlInput").addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    navigateToUrl()
+                }
+            })
+
+            document.getElementById("welcomeSearch").addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    searchFromWelcome()
+                }
+            })
+
+            // MUSIC SEARCH EVENT LISTENERS
+            document.getElementById("youtubeSearch").addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    searchYouTube()
+                }
+            })
+
+            document.getElementById("spotifySearch").addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    searchSpotify()
+                }
+            })
+
+            console.log("✅ Main app initialized")
+        }
+
+        // LEFT SIDEBAR FUNCTIONS
+        function toggleLeftSidebar() {
+            const sidebar = document.getElementById("leftSidebar")
+            sidebar.classList.toggle("expanded")
+            console.log("📱 Sidebar toggled")
+        }
+
+        function openGames() {
+            showNotification("🎮 Games section coming soon! Will include embedded games and game sites.", "info")
+        }
+
+        function openMovies() {
+            showNotification("🎬 Movies section coming soon! Will include streaming capabilities.", "info")
+        }
+
+        function openTools() {
+            showNotification("🔧 Tools section coming soon! Will include proxy utilities and more.", "info")
+        }
+
+        // MUSIC SIDEBAR FUNCTIONS
+        function toggleMusicSidebar() {
+            const musicSidebar = document.getElementById("musicSidebar")
+            musicSidebar.classList.toggle("open")
+            console.log("🎵 Music sidebar toggled")
+        }
+
+        function closeMusicSidebar() {
+            const musicSidebar = document.getElementById("musicSidebar")
+            musicSidebar.classList.remove("open")
+        }
+
+        function switchMusicTab(platform) {
+            // UPDATE TAB BUTTONS
+            document.querySelectorAll(".music-tab").forEach((tab) => {
+                tab.classList.remove("active")
+            })
+            event.target.classList.add("active")
+
+            // UPDATE PANELS
+            document.querySelectorAll(".music-panel").forEach((panel) => {
+                panel.classList.remove("active")
+            })
+            document.getElementById(platform + "Music").classList.add("active")
+        }
+
+        // YOUTUBE MUSIC FUNCTIONS
+        function searchYouTube() {
+            const query = document.getElementById("youtubeSearch").value.trim()
+            if (!query) return
+
+            const resultsDiv = document.getElementById("youtubeResults")
+            resultsDiv.innerHTML = '<div class="placeholder-text">🔍 Searching YouTube...</div>'
+
+            // SIMULATE YOUTUBE SEARCH RESULTS
+            setTimeout(() => {
+                const mockResults = [
+                    {
+                        title: `${query} - Official Music Video`,
+                        artist: "Artist Name",
+                        thumbnail: "https://via.placeholder.com/70x70/ff0000/ffffff?text=YT",
+                        videoId: "dQw4w9WgXcQ",
+                    },
+                    {
+                        title: `${query} (Lyrics)`,
+                        artist: "Various Artists",
+                        thumbnail: "https://via.placeholder.com/70x70/ff0000/ffffff?text=YT",
+                        videoId: "dQw4w9WgXcQ",
+                    },
+                    {
+                        title: `Best of ${query}`,
+                        artist: "Compilation",
+                        thumbnail: "https://via.placeholder.com/70x70/ff0000/ffffff?text=YT",
+                        videoId: "dQw4w9WgXcQ",
+                    },
+                ]
+
+                resultsDiv.innerHTML = mockResults
+                    .map(
+                        (result) => `
+                        <div class="music-item" onclick="playYouTubeTrack('${result.videoId}', '${result.title}', '${result.artist}')">
+                            <img src="${result.thumbnail}" alt="${result.title}">
+                            <div class="music-info">
+                                <div class="music-title">${result.title}</div>
+                                <div class="music-artist">${result.artist}</div>
+                            </div>
+                        </div>
+                    `,
+                    )
+                    .join("")
+            }, 1000)
+        }
+
+        function playYouTubeTrack(videoId, title, artist) {
+            document.getElementById("trackTitle").textContent = title
+            document.getElementById("trackArtist").textContent = artist
+            showNotification(`🎵 Now Playing: ${title}`, "success")
+        }
+
+        // SPOTIFY FUNCTIONS
+        function searchSpotify() {
+            const query = document.getElementById("spotifySearch").value.trim()
+            if (!query) return
+
+            const resultsDiv = document.getElementById("spotifyResults")
+            resultsDiv.innerHTML = '<div class="placeholder-text">🔍 Searching Spotify...</div>'
+
+            // SIMULATE SPOTIFY SEARCH RESULTS
+            setTimeout(() => {
+                const mockResults = [
+                    {
+                        title: `${query}`,
+                        artist: "Popular Artist",
+                        thumbnail: "https://via.placeholder.com/70x70/1db954/ffffff?text=SP",
+                        trackId: "spotify123",
+                    },
+                    {
+                        title: `${query} (Remix)`,
+                        artist: "DJ Remix",
+                        thumbnail: "https://via.placeholder.com/70x70/1db954/ffffff?text=SP",
+                        trackId: "spotify456",
+                    },
+                    {
+                        title: `${query} - Acoustic`,
+                        artist: "Acoustic Version",
+                        thumbnail: "https://via.placeholder.com/70x70/1db954/ffffff?text=SP",
+                        trackId: "spotify789",
+                    },
+                ]
+
+                resultsDiv.innerHTML = mockResults
+                    .map(
+                        (result) => `
+                        <div class="music-item" onclick="playSpotifyTrack('${result.trackId}', '${result.title}', '${result.artist}')">
+                            <img src="${result.thumbnail}" alt="${result.title}">
+                            <div class="music-info">
+                                <div class="music-title">${result.title}</div>
+                                <div class="music-artist">${result.artist}</div>
+                            </div>
+                        </div>
+                    `,
+                    )
+                    .join("")
+            }, 1000)
+        }
+
+        function playSpotifyTrack(trackId, title, artist) {
+            document.getElementById("trackTitle").textContent = title
+            document.getElementById("trackArtist").textContent = artist
+            showNotification(`🎵 Now Playing: ${title}`, "success")
+        }
+
+        // MUSIC PLAYER CONTROLS
+        function togglePlay() {
+            const playBtn = document.getElementById("playBtn")
+            const icon = playBtn.querySelector("i")
+
+            if (isPlaying) {
+                icon.className = "fas fa-play"
+                isPlaying = false
+                showNotification("⏸️ Music Paused", "info")
+            } else {
+                icon.className = "fas fa-pause"
+                isPlaying = true
+                showNotification("▶️ Music Playing", "info")
+            }
+        }
+
+        function previousTrack() {
+            showNotification("⏮️ Previous Track", "info")
+        }
+
+        function nextTrack() {
+            showNotification("⏭️ Next Track", "info")
+        }
+
+        // TAB MANAGEMENT FUNCTIONS
+        function addNewTab() {
+            const tabId = "tab_" + tabCounter++
+            const newTab = {
+                id: tabId,
+                title: "New Tab",
+                url: "",
+                isActive: true,
+            }
+
+            // DEACTIVATE ALL OTHER TABS
+            tabs.forEach((tab) => (tab.isActive = false))
+
+            // ADD NEW TAB
+            tabs.push(newTab)
+            activeTabId = tabId
+
+            renderTabs()
+            showWelcomeScreen()
+            updateAddressBar("")
+            console.log("➕ New tab added:", tabId)
+        }
+
+        function removeTab(tabId) {
+            if (tabs.length === 1) return // DON'T REMOVE THE LAST TAB
+
+            const tabIndex = tabs.findIndex((tab) => tab.id === tabId)
+            if (tabIndex === -1) return
+
+            const wasActive = tabs[tabIndex].isActive
+            tabs.splice(tabIndex, 1)
+
+            if (wasActive && tabs.length > 0) {
+                // ACTIVATE THE PREVIOUS TAB OR THE FIRST TAB
+                const newActiveIndex = Math.max(0, tabIndex - 1)
+                tabs[newActiveIndex].isActive = true
+                activeTabId = tabs[newActiveIndex].id
+                switchToTab(activeTabId)
+            }
+
+            renderTabs()
+            console.log("❌ Tab removed:", tabId)
+        }
+
+        function switchTab(tabId) {
+            // DEACTIVATE ALL TABS
+            tabs.forEach((tab) => (tab.isActive = false))
+
+            // ACTIVATE SELECTED TAB
+            const selectedTab = tabs.find((tab) => tab.id === tabId)
+            if (selectedTab) {
+                selectedTab.isActive = true
+                activeTabId = tabId
+
+                if (selectedTab.url) {
+                    loadUrlInContent(selectedTab.url)
+                    updateAddressBar(selectedTab.url)
+                } else {
+                    showWelcomeScreen()
+                    updateAddressBar("")
+                }
+            }
+
+            renderTabs()
+            console.log("🔄 Switched to tab:", tabId)
+        }
+
+        function switchToTab(tabId) {
+            switchTab(tabId)
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById("tabsContainer")
+            tabsContainer.innerHTML = ""
+
+            tabs.forEach((tab) => {
+                const tabElement = document.createElement("div")
+                tabElement.className = `tab ${tab.isActive ? "active" : ""}`
+                tabElement.innerHTML = `
+                    <i class="fas fa-globe tab-icon"></i>
+                    <span class="tab-title">${tab.title}</span>
+                    ${tabs.length > 1 ? `<i class="fas fa-times tab-close" onclick="removeTab('${tab.id}')"></i>` : ""}
+                `
+
+                tabElement.addEventListener("click", (e) => {
+                    if (!e.target.classList.contains("tab-close")) {
+                        switchTab(tab.id)
+                    }
+                })
+
+                tabsContainer.appendChild(tabElement)
+            })
+        }
+
+        // NAVIGATION FUNCTIONS
+        function navigateToUrl() {
+            const urlInput = document.getElementById("urlInput")
+            const url = urlInput.value.trim()
+
+            if (!url) return
+
+            loadUrl(url)
+            console.log("🌐 Navigating to:", url)
+        }
+
+        function searchFromWelcome() {
+            const welcomeSearch = document.getElementById("welcomeSearch")
+            const url = welcomeSearch.value.trim()
+
+            if (!url) return
+
+            // INDEPENDENT SEARCH - DON'T SYNC WITH ADDRESS BAR
+            loadUrl(url)
+            console.log("🔍 Searching from welcome:", url)
+        }
+
+        function loadUrl(inputUrl) {
+            let url = inputUrl
+
+            // DETERMINE IF IT'S A URL OR SEARCH QUERY
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                if (url.includes(".") && !url.includes(" ")) {
+                    // LOOKS LIKE A DOMAIN
+                    url = "https://" + url
+                } else {
+                    // SEARCH QUERY - USE DUCKDUCKGO
+                    url = `https://duckduckgo.com/?q=${encodeURIComponent(url)}`
+                }
+            }
+
+            // UPDATE ACTIVE TAB
+            const activeTab = tabs.find((tab) => tab.isActive)
+            if (activeTab) {
+                activeTab.url = url
+                activeTab.title = getDomainFromUrl(url) || "Loading..."
+            }
+
+            loadUrlInContent(url)
+            updateAddressBar(url)
+            renderTabs()
+            updateStatusBar(url)
+        }
+
+        function loadUrlInContent(url) {
+            const welcomeScreen = document.getElementById("welcomeScreen")
+            const proxyContent = document.getElementById("proxyContent")
+
+            welcomeScreen.style.display = "none"
+            proxyContent.style.display = "block"
+            proxyContent.classList.add("show")
+
+            // CREATE CUSTOM PROXY CONTENT
+            proxyContent.innerHTML = `
+                <div style="padding: 30px; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); color: #333; font-family: Arial; min-height: 100%; box-sizing: border-box;">
+                    <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                        <h2 style="color: #00ffff; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-globe" style="color: #00ff88;"></i>
+                            Loading: ${url}
+                        </h2>
+                        <p style="margin: 0; color: #666;">Attempting to load content through secure proxy...</p>
+                    </div>
+                    <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <iframe src="${url}" 
+                                style="width: 100%; height: calc(100vh - 300px); border: none; background: white;" 
+                                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-popups-to-escape-sandbox"
+                                onload="handleIframeLoad()" 
+                                onerror="handleIframeError()">
+                        </iframe>
+                    </div>
+                </div>
+            `
+
+            // UPDATE TAB TITLE AFTER A DELAY
+            setTimeout(() => {
+                const activeTab = tabs.find((tab) => tab.isActive)
+                if (activeTab) {
+                    activeTab.title = getDomainFromUrl(url) || "Loaded"
+                    renderTabs()
+                }
+                showNotification("✅ Content loaded", "success")
+            }, 2000)
+
+            console.log("📄 Loading URL in content:", url)
+        }
+
+        function handleIframeLoad() {
+            console.log("✅ Iframe loaded successfully")
+            showNotification("✅ Page loaded successfully", "success")
+        }
+
+        function handleIframeError() {
+            console.log("❌ Iframe failed to load")
+            showNotification("❌ Some content may be blocked by the site's security policy", "error")
+        }
+
+        function showWelcomeScreen() {
+            const welcomeScreen = document.getElementById("welcomeScreen")
+            const proxyContent = document.getElementById("proxyContent")
+
+            welcomeScreen.style.display = "flex"
+            proxyContent.style.display = "none"
+            proxyContent.classList.remove("show")
+            proxyContent.innerHTML = ""
+        }
+
+        function updateAddressBar(url) {
+            document.getElementById("urlInput").value = url
+        }
+
+        function updateStatusBar(url) {
+            const currentSite = document.getElementById("currentSite")
+
+            if (url) {
+                const domain = getDomainFromUrl(url)
+                currentSite.textContent = `Loading: ${domain}`
+            } else {
+                currentSite.textContent = ""
+            }
+        }
+
+        function getDomainFromUrl(url) {
+            try {
+                const urlObj = new URL(url)
+                return urlObj.hostname.replace("www.", "")
+            } catch (e) {
+                return url
+            }
+        }
+
+        // NOTIFICATION SYSTEM
+        function showNotification(message, type = "info") {
+            const notification = document.createElement("div")
+            notification.className = `notification ${type}`
+            notification.textContent = message
+
+            const colors = {
+                success: "rgba(0, 255, 136, 0.95)",
+                error: "rgba(255, 68, 68, 0.95)",
+                info: "rgba(0, 255, 255, 0.95)",
+            }
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: ${colors[type]};
+                color: #000;
+                padding: 1.5rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                animation: slideIn 0.4s ease;
+                max-width: 400px;
+                font-weight: bold;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+                font-size: 1.1rem;
+            `
+
+            document.body.appendChild(notification)
+
+            setTimeout(() => {
+                notification.style.animation = "slideOut 0.4s ease"
+                setTimeout(() => {
+                    notification.remove()
+                }, 400)
+            }, 5000)
+
+            console.log("📢 Notification:", message)
+        }
+
+        // ADD CSS ANIMATIONS
+        const style = document.createElement("style")
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `
+        document.head.appendChild(style)
+
+        // GLOBAL ERROR HANDLER
+        window.addEventListener("error", (e) => {
+            console.error("💥 Global error:", e.error)
+        })
+
+        console.log("🎯 WirelessBypassing Script loaded successfully")
+    </script>
+</body>
+</html>
 
