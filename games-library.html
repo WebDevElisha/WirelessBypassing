@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games Library - WirelessBypassing</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2300ffff'/><circle cx='50' cy='50' r='25' fill='%23000'/><circle cx='50' cy='50' r='15' fill='%2300ff88'/></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000 0%, #1a1a2e 50%, #000 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* MADE BY CREDIT */
+        .credit {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            color: #888;
+            font-size: 0.8rem;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .games-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .games-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .games-title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b00, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+        }
+
+        .games-subtitle {
+            color: #888;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn, .proxy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            color: #000;
+        }
+
+        .proxy-btn {
+            background: linear-gradient(45deg, #ff6b00, #ff8c00);
+            color: #000;
+        }
+
+        .back-btn:hover, .proxy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
+        }
+
+        .search-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #ff6b00;
+            box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .search-btn {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(45deg, #ff6b00, #ff8c00);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.5);
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 107, 0, 0.1);
+            border: 2px solid #ff6b00;
+            border-radius: 25px;
+            color: #ff6b00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: rgba(255, 107, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .game-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            border: 2px solid #333;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            border-color: #ff6b00;
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .game-icon {
+            font-size: 3.5rem;
+            color: #ff6b00;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px #ff6b00;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .game-description {
+            color: #888;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .game-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .status-coming-soon {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .category-section {
+            margin-bottom: 4rem;
+        }
+
+        .category-title {
+            font-size: 2.5rem;
+            color: #ff6b00;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .games-title {
+                font-size: 3rem;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .categories {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MADE BY CREDIT -->
+    <div class="credit">Made by Elisha Y</div>
+
+    <div class="games-container">
+        <div class="games-header">
+            <h1 class="games-title">🎮 Games Library</h1>
+            <p class="games-subtitle">Your ultimate gaming destination</p>
+            <div class="header-actions">
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Proxy
+                </a>
+                <button onclick="openInProxy()" class="proxy-btn">
+                    <i class="fas fa-shield-alt"></i>
+                    Open in Proxy
+                </button>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for games..." class="search-input">
+                <button onclick="searchGames()" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="categories">
+            <button class="category-btn active" onclick="filterGames('all')">All Games</button>
+            <button class="category-btn" onclick="filterGames('arcade')">Arcade</button>
+            <button class="category-btn" onclick="filterGames('puzzle')">Puzzle</button>
+            <button class="category-btn" onclick="filterGames('action')">Action</button>
+            <button class="category-btn" onclick="filterGames('classic')">Classic</button>
+            <button class="category-btn" onclick="filterGames('sports')">Sports</button>
+            <button class="category-btn" onclick="filterGames('strategy')">Strategy</button>
+        </div>
+
+        <div id="gamesContainer">
+            <!-- Games will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const games = [
+            // ARCADE GAMES
+            {
+                id: 'snake',
+                title: 'Snake Game',
+                description: 'Classic snake game where you eat food and grow longer while avoiding walls and yourself.',
+                icon: 'fas fa-snake',
+                category: 'arcade',
+                url: 'https://playsnake.org/',
+                status: 'available'
+            },
+            {
+                id: 'pacman',
+                title: 'Pac-Man',
+                description: 'Navigate mazes, eat dots, and avoid ghosts in this arcade classic.',
+                icon: 'fas fa-ghost',
+                category: 'arcade',
+                url: 'https://pacman.live/',
+                status: 'available'
+            },
+            {
+                id: 'pong',
+                title: 'Pong',
+                description: 'The original arcade game - bounce the ball past your opponent.',
+                icon: 'fas fa-circle',
+                category: 'arcade',
+                url: 'https://pong-2.com/',
+                status: 'available'
+            },
+            {
+                id: 'flappybird',
+                title: 'Flappy Bird',
+                description: 'Guide the bird through pipes in this challenging arcade game.',
+                icon: 'fas fa-dove',
+                category: 'arcade',
+                url: 'https://flappybird.io/',
+                status: 'available'
+            },
+            {
+                id: 'frogger',
+                title: 'Frogger',
+                description: 'Help the frog cross busy roads and rivers safely.',
+                icon: 'fas fa-frog',
+                category: 'arcade',
+                url: 'https://www.retrogames.cc/arcade-games/frogger.html',
+                status: 'available'
+            },
+            {
+                id: 'breakout',
+                title: 'Breakout',
+                description: 'Break all the bricks with your paddle and ball.',
+                icon: 'fas fa-square',
+                category: 'arcade',
+                url: 'https://elgoog.im/breakout/',
+                status: 'available'
+            },
+
+            // PUZZLE GAMES
+            {
+                id: 'tetris',
+                title: 'Tetris',
+                description: 'The legendary block-stacking puzzle game that started it all.',
+                icon: 'fas fa-th-large',
+                category: 'puzzle',
+                url: 'https://tetris.com/play-tetris',
+                status: 'available'
+            },
+            {
+                id: '2048',
+                title: '2048',
+                description: 'Slide numbered tiles to combine them and reach the 2048 tile.',
+                icon: 'fas fa-th',
+                category: 'puzzle',
+                url: 'https://play2048.co/',
+                status: 'available'
+            },
+            {
+                id: 'minesweeper',
+                title: 'Minesweeper',
+                description: 'Clear the minefield using logic and a bit of luck.',
+                icon: 'fas fa-bomb',
+                category: 'puzzle',
+                url: 'https://minesweeper.online/',
+                status: 'available'
+            },
+            {
+                id: 'sudoku',
+                title: 'Sudoku',
+                description: 'Fill the grid with numbers following the classic rules.',
+                icon: 'fas fa-th-large',
+                category: 'puzzle',
+                url: 'https://sudoku.com/',
+                status: 'available'
+            },
+            {
+                id: 'chess',
+                title: 'Chess',
+                description: 'Play the classic strategy game against AI or friends.',
+                icon: 'fas fa-chess',
+                category: 'puzzle',
+                url: 'https://chess.com/',
+                status: 'available'
+            },
+            {
+                id: 'rubiks',
+                title: 'Rubik\'s Cube',
+                description: 'Solve the classic 3D puzzle cube online.',
+                icon: 'fas fa-cube',
+                category: 'puzzle',
+                url: 'https://rubiks-cube-solver.com/',
+                status: 'available'
+            },
+
+            // ACTION GAMES
+            {
+                id: 'asteroids',
+                title: 'Asteroids',
+                description: 'Pilot your spaceship through an asteroid field.',
+                icon: 'fas fa-rocket',
+                category: 'action',
+                url: 'https://freeasteroids.org/',
+                status: 'available'
+            },
+            {
+                id: 'centipede',
+                title: 'Centipede',
+                description: 'Shoot the centipede as it winds down the screen.',
+                icon: 'fas fa-bug',
+                category: 'action',
+                url: 'https://www.retrogames.cc/arcade-games/centipede.html',
+                status: 'available'
+            },
+            {
+                id: 'spaceinvaders',
+                title: 'Space Invaders',
+                description: 'Defend Earth from waves of alien invaders.',
+                icon: 'fas fa-space-shuttle',
+                category: 'action',
+                url: 'https://freeinvaders.org/',
+                status: 'available'
+            },
+            {
+                id: 'doom',
+                title: 'Doom',
+                description: 'Classic first-person shooter in your browser.',
+                icon: 'fas fa-crosshairs',
+                category: 'action',
+                url: 'https://js-dos.com/games/doom.exe.html',
+                status: 'available'
+            },
+
+            // CLASSIC GAMES
+            {
+                id: 'mario',
+                title: 'Super Mario Bros',
+                description: 'The classic platformer that defined a generation.',
+                icon: 'fas fa-gamepad',
+                category: 'classic',
+                url: 'https://supermariobros.io/',
+                status: 'available'
+            },
+            {
+                id: 'donkeykong',
+                title: 'Donkey Kong',
+                description: 'Help Mario rescue the princess from Donkey Kong.',
+                icon: 'fas fa-hammer',
+                category: 'classic',
+                url: 'https://www.retrogames.cc/arcade-games/donkey-kong.html',
+                status: 'available'
+            },
+            {
+                id: 'galaga',
+                title: 'Galaga',
+                description: 'Shoot down alien ships in this classic space shooter.',
+                icon: 'fas fa-fighter-jet',
+                category: 'classic',
+                url: 'https://www.retrogames.cc/arcade-games/galaga.html',
+                status: 'available'
+            },
+
+            // SPORTS GAMES
+            {
+                id: 'basketball',
+                title: 'Basketball',
+                description: 'Shoot hoops and score points in this basketball game.',
+                icon: 'fas fa-basketball-ball',
+                category: 'sports',
+                url: 'https://www.agame.com/game/basketball-stars',
+                status: 'available'
+            },
+            {
+                id: 'soccer',
+                title: 'Soccer',
+                description: 'Play football/soccer with realistic physics.',
+                icon: 'fas fa-futbol',
+                category: 'sports',
+                url: 'https://www.agame.com/game/soccer-skills-euro-cup',
+                status: 'available'
+            },
+            {
+                id: 'tennis',
+                title: 'Tennis',
+                description: 'Play tennis matches against AI opponents.',
+                icon: 'fas fa-table-tennis',
+                category: 'sports',
+                url: 'https://www.agame.com/game/tennis-masters',
+                status: 'available'
+            },
+            {
+                id: 'golf',
+                title: 'Mini Golf',
+                description: 'Navigate challenging mini golf courses.',
+                icon: 'fas fa-golf-ball',
+                category: 'sports',
+                url: 'https://www.agame.com/game/mini-golf-club',
+                status: 'available'
+            },
+
+            // STRATEGY GAMES
+            {
+                id: 'checkers',
+                title: 'Checkers',
+                description: 'Classic board game of strategy and tactics.',
+                icon: 'fas fa-chess-board',
+                category: 'strategy',
+                url: 'https://www.247checkers.com/',
+                status: 'available'
+            },
+            {
+                id: 'risk',
+                title: 'Risk',
+                description: 'Conquer the world in this strategy board game.',
+                icon: 'fas fa-globe-americas',
+                category: 'strategy',
+                url: 'https://www.warzone.com/',
+                status: 'available'
+            },
+            {
+                id: 'civilization',
+                title: 'Civilization',
+                description: 'Build and manage your own civilization.',
+                icon: 'fas fa-city',
+                category: 'strategy',
+                url: 'https://play.freeciv.org/',
+                status: 'available'
+            },
+
+            // MORE GAMES
+            {
+                id: 'solitaire',
+                title: 'Solitaire',
+                description: 'Classic card game for single players.',
+                icon: 'fas fa-spade',
+                category: 'classic',
+                url: 'https://solitaired.com/',
+                status: 'available'
+            },
+            {
+                id: 'poker',
+                title: 'Poker',
+                description: 'Play Texas Hold\'em poker online.',
+                icon: 'fas fa-heart',
+                category: 'classic',
+                url: 'https://www.247games.com/poker',
+                status: 'available'
+            },
+            {
+                id: 'blackjack',
+                title: 'Blackjack',
+                description: 'Beat the dealer in this classic card game.',
+                icon: 'fas fa-diamond',
+                category: 'classic',
+                url: 'https://www.247blackjack.com/',
+                status: 'available'
+            }
+        ]
+
+        let currentFilter = 'all'
+        let filteredGames = games
+
+        function renderGames(gamesToRender = games) {
+            const gamesContainer = document.getElementById('gamesContainer')
+            
+            if (currentFilter === 'all') {
+                // Group by category when showing all
+                const categories = ['arcade', 'puzzle', 'action', 'classic', 'sports', 'strategy']
+                let html = ''
+                
+                categories.forEach(category => {
+                    const categoryGames = gamesToRender.filter(game => game.category === category)
+                    if (categoryGames.length > 0) {
+                        html += `
+                            <div class="category-section">
+                                <h2 class="category-title">${category.charAt(0).toUpperCase() + category.slice(1)} Games</h2>
+                                <div class="games-grid">
+                                    ${categoryGames.map(game => createGameCard(game)).join('')}
+                                </div>
+                            </div>
+                        `
+                    }
+                })
+                
+                gamesContainer.innerHTML = html
+            } else {
+                // Show filtered games in a single grid
+                gamesContainer.innerHTML = `
+                    <div class="games-grid">
+                        ${gamesToRender.map(game => createGameCard(game)).join('')}
+                    </div>
+                `
+            }
+        }
+
+        function createGameCard(game) {
+            return `
+                <div class="game-card" onclick="playGame('${game.id}', '${game.url}', '${game.status}')">
+                    <div class="game-icon">
+                        <i class="${game.icon}"></i>
+                    </div>
+                    <h3 class="game-title">${game.title}</h3>
+                    <p class="game-description">${game.description}</p>
+                    <div class="game-status ${game.status === 'available' ? 'status-available' : 'status-coming-soon'}">
+                        ${game.status === 'available' ? '✅ Play Now' : '🚧 Coming Soon'}
+                    </div>
+                </div>
+            `
+        }
+
+        function filterGames(category) {
+            currentFilter = category
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active')
+            })
+            event.target.classList.add('active')
+            
+            // Filter games
+            filteredGames = category === 'all' 
+                ? games 
+                : games.filter(game => game.category === category)
+            
+            renderGames(filteredGames)
+        }
+
+        function searchGames() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim()
+            
+            if (!searchTerm) {
+                renderGames(filteredGames)
+                return
+            }
+            
+            const searchResults = filteredGames.filter(game => 
+                game.title.toLowerCase().includes(searchTerm) ||
+                game.description.toLowerCase().includes(searchTerm) ||
+                game.category.toLowerCase().includes(searchTerm)
+            )
+            
+            renderGames(searchResults)
+        }
+
+        function playGame(gameId, gameUrl, status) {
+            if (status === 'coming-soon') {
+                showNotification('🚧 This game is coming soon! Stay tuned for updates.', 'info')
+                return
+            }
+
+            if (gameUrl === '#') {
+                showNotification('🎮 Game not yet implemented. Coming soon!', 'info')
+                return
+            }
+
+            // Open game in new tab
+            window.open(gameUrl, '_blank')
+            showNotification(`🎮 Opening ${gameId}...`, 'success')
+        }
+
+        function openInProxy() {
+            // Open the main proxy page
+            window.open('index.html', '_blank')
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div')
+            notification.textContent = message
+
+            const colors = {
+                success: 'rgba(0, 255, 136, 0.95)',
+                error: 'rgba(255, 68, 68, 0.95)',
+                info: 'rgba(0, 255, 255, 0.95)',
+            }
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: #000;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                max-width: 350px;
+                font-weight: bold;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            `
+
+            document.body.appendChild(notification)
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease'
+                setTimeout(() => {
+                    notification.remove()
+                }, 300)
+            }, 4000)
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style')
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `
+        document.head.appendChild(style)
+
+        // Add search on enter key
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchGames()
+            }
+        })
+
+        // Initialize games on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGames()
+        })
+    </script>
+</body>
+</html>
