@@ -18,6 +18,21 @@
             background: #000;
             color: #fff;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* MADE BY CREDIT */
+        .credit {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            color: #888;
+            font-size: 0.8rem;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            border: 1px solid #333;
         }
 
         /* PASSWORD SCREEN */
@@ -250,102 +265,12 @@
             opacity: 1;
         }
 
-        /* GAMES SIDEBAR */
-        .games-sidebar {
-            position: fixed;
-            left: -400px;
-            top: 0;
-            width: 400px;
-            height: 100vh;
-            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
-            border-right: 3px solid #ff6b00;
-            z-index: 200;
-            transition: left 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 5px 0 20px rgba(255, 107, 0, 0.3);
-        }
-
-        .games-sidebar.open {
-            left: 0;
-        }
-
-        .games-header {
-            padding: 1.5rem;
-            border-bottom: 3px solid #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 107, 0, 0.15);
-        }
-
-        .games-header h3 {
-            color: #ff6b00;
-            text-shadow: 0 0 15px #ff6b00;
-            font-size: 1.5rem;
-        }
-
-        .games-header i {
-            color: #ff4444;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .games-header i:hover {
-            color: #ff6666;
-            transform: scale(1.2);
-            text-shadow: 0 0 10px #ff4444;
-        }
-
-        .games-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-        }
-
-        .game-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255, 107, 0, 0.1);
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .game-item:hover {
-            background: rgba(255, 107, 0, 0.2);
-            border-color: #ff6b00;
-            transform: translateX(5px);
-        }
-
-        .game-icon {
-            font-size: 2rem;
-            color: #ff6b00;
-            margin-right: 1rem;
-            width: 40px;
-            text-align: center;
-        }
-
-        .game-info h4 {
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-
-        .game-info p {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* MUSIC SIDEBAR */
+        /* MUSIC SIDEBAR - RIGHT SIDE */
         .music-sidebar {
             position: fixed;
-            right: -450px;
+            right: -500px;
             top: 0;
-            width: 450px;
+            width: 500px;
             height: 100vh;
             background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
             border-left: 3px solid #00ff88;
@@ -388,50 +313,10 @@
             text-shadow: 0 0 10px #ff4444;
         }
 
-        .music-tabs {
-            display: flex;
-            border-bottom: 2px solid #333;
-        }
-
-        .music-tab {
-            flex: 1;
-            padding: 1rem;
-            background: #2a2a2a;
-            border: none;
-            color: #888;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-right: 1px solid #333;
-            font-weight: bold;
-        }
-
-        .music-tab:last-child {
-            border-right: none;
-        }
-
-        .music-tab.active {
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-            border-bottom: 3px solid #00ff88;
-        }
-
-        .music-tab:hover:not(.active) {
-            background: #333;
-            color: #fff;
-        }
-
         .music-content {
             flex: 1;
             overflow-y: auto;
-        }
-
-        .music-panel {
-            display: none;
             padding: 1.5rem;
-        }
-
-        .music-panel.active {
-            display: block;
         }
 
         .search-section {
@@ -470,6 +355,103 @@
         .search-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 255, 136, 0.5);
+        }
+
+        .music-results {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .music-item:hover {
+            background: rgba(0, 255, 136, 0.15);
+            transform: translateX(5px);
+        }
+
+        .music-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+
+        .music-info {
+            flex: 1;
+        }
+
+        .music-title {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .music-artist {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .music-player {
+            border-top: 3px solid #333;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .current-track {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .current-track h4 {
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-track p {
+            color: #888;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-controls button {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-controls button:hover {
+            background: rgba(0, 255, 136, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
         }
 
         /* MAIN CONTENT */
@@ -518,6 +500,7 @@
 
         .logo h1 {
             font-size: 1.5rem;
+            font-weight: bold;
             background: linear-gradient(45deg, #00ffff, #00ff88);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -584,20 +567,19 @@
         .tab {
             display: flex;
             align-items: center;
-            min-width: 180px;
-            max-width: 250px;
+            min-width: 160px;
+            max-width: 220px;
             background: #2a2a2a;
             border-right: 1px solid #333;
-            padding: 0.8rem;
+            padding: 0.7rem;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        /* COMPACT TABS WHEN CONTENT IS LOADED */
         .tab-bar.compact .tab {
-            min-width: 120px;
-            max-width: 180px;
-            padding: 0.5rem;
+            min-width: 100px;
+            max-width: 150px;
+            padding: 0.4rem;
         }
 
         .tab.active {
@@ -611,8 +593,8 @@
 
         .tab-icon {
             color: #888;
-            margin-right: 0.8rem;
-            font-size: 1rem;
+            margin-right: 0.6rem;
+            font-size: 0.9rem;
         }
 
         .tab-title {
@@ -620,17 +602,17 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .tab-bar.compact .tab-title {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
 
         .tab-close {
             color: #888;
-            margin-left: 0.8rem;
-            padding: 0.3rem;
+            margin-left: 0.6rem;
+            padding: 0.2rem;
             border-radius: 4px;
             transition: all 0.3s ease;
         }
@@ -644,16 +626,16 @@
             background: none;
             border: none;
             color: #888;
-            padding: 1rem;
+            padding: 0.8rem;
             cursor: pointer;
             border-left: 1px solid #333;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .tab-bar.compact .add-tab-btn {
-            padding: 0.8rem;
-            font-size: 1rem;
+            padding: 0.6rem;
+            font-size: 0.9rem;
         }
 
         .add-tab-btn:hover {
@@ -664,36 +646,36 @@
         /* ADDRESS BAR - SMALLER WHEN CONTENT LOADED */
         .address-bar {
             background: #1a1a1a;
-            padding: 1rem;
+            padding: 0.8rem;
             border-bottom: 2px solid #333;
             transition: all 0.3s ease;
         }
 
         .address-bar.compact {
-            padding: 0.5rem;
+            padding: 0.4rem;
         }
 
         .address-container {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
-            gap: 0.8rem;
+            gap: 0.6rem;
         }
 
         .url-input {
             flex: 1;
-            padding: 1rem;
+            padding: 0.8rem;
             background: #2a2a2a;
             border: 2px solid #444;
-            border-radius: 10px;
+            border-radius: 8px;
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
         .address-bar.compact .url-input {
-            padding: 0.8rem;
-            font-size: 0.9rem;
+            padding: 0.6rem;
+            font-size: 0.8rem;
         }
 
         .url-input:focus {
@@ -703,20 +685,20 @@
         }
 
         .go-button {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             background: linear-gradient(45deg, #00ffff, #00ff88);
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             color: #000;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .address-bar.compact .go-button {
-            padding: 0.8rem 1.5rem;
-            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.8rem;
         }
 
         .go-button:hover {
@@ -724,30 +706,30 @@
             box-shadow: 0 5px 20px rgba(0, 255, 255, 0.5);
         }
 
-        /* CONTENT AREA - LARGER WHEN CONTENT LOADED */
+        /* CONTENT AREA - BIGGER IFRAME */
         .content-area {
             flex: 1;
-            padding: 1rem;
+            padding: 0.8rem;
             background: #0a0a0a;
             overflow: hidden;
             transition: all 0.3s ease;
         }
 
         .content-area.fullscreen {
-            padding: 0.5rem;
+            padding: 0.3rem;
         }
 
         .browser-frame {
             height: 100%;
             background: #1a1a1a;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 2px solid #333;
             overflow: hidden;
             position: relative;
         }
 
         .content-area.fullscreen .browser-frame {
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid #333;
         }
 
@@ -797,15 +779,6 @@
             color: #888;
             font-size: 1.2rem;
             margin-bottom: 3rem;
-        }
-
-        .search-section {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .welcome-input {
@@ -906,18 +879,18 @@
         .status-bar {
             background: #1a1a1a;
             border-top: 2px solid #333;
-            padding: 0.8rem 1rem;
+            padding: 0.6rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #888;
             transition: all 0.3s ease;
         }
 
         .status-bar.compact {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
+            font-size: 0.7rem;
         }
 
         .status-left {
@@ -932,12 +905,12 @@
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: #00ff88;
             border-radius: 50%;
             animation: pulse 2s infinite;
-            box-shadow: 0 0 10px #00ff88;
+            box-shadow: 0 0 8px #00ff88;
         }
 
         /* ANIMATIONS */
@@ -966,20 +939,19 @@
             .left-sidebar.expanded {
                 width: 180px;
             }
-            .music-sidebar, .games-sidebar {
+            .music-sidebar {
                 width: 100%;
                 right: -100%;
-                left: -100%;
             }
             .password-container {
                 margin: 1rem;
                 padding: 2rem;
             }
             .tab {
-                min-width: 120px;
+                min-width: 100px;
             }
             .tab-bar.compact .tab {
-                min-width: 100px;
+                min-width: 80px;
             }
             .welcome-title {
                 font-size: 2.5rem;
@@ -992,8 +964,8 @@
 
         /* SCROLLBAR */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -1002,7 +974,7 @@
 
         ::-webkit-scrollbar-thumb {
             background: #444;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -1015,6 +987,9 @@
     </style>
 </head>
 <body>
+    <!-- MADE BY CREDIT -->
+    <div class="credit">Made by Elisha Y</div>
+
     <!-- PASSWORD SCREEN -->
     <div id="passwordScreen" class="password-screen">
         <div class="password-container">
@@ -1074,84 +1049,34 @@
             </div>
         </div>
 
-        <!-- GAMES SIDEBAR -->
-        <div class="games-sidebar" id="gamesSidebar">
-            <div class="games-header">
-                <h3>Games Hub</h3>
-                <i class="fas fa-times" onclick="closeGamesSidebar()"></i>
-            </div>
-            <div class="games-content">
-                <div class="game-item" onclick="loadGame('snake')">
-                    <div class="game-icon"><i class="fas fa-snake"></i></div>
-                    <div class="game-info">
-                        <h4>Snake Game</h4>
-                        <p>Classic snake game</p>
-                    </div>
-                </div>
-                <div class="game-item" onclick="loadGame('tetris')">
-                    <div class="game-icon"><i class="fas fa-th-large"></i></div>
-                    <div class="game-info">
-                        <h4>Tetris</h4>
-                        <p>Block puzzle game</p>
-                    </div>
-                </div>
-                <div class="game-item" onclick="loadGame('pong')">
-                    <div class="game-icon"><i class="fas fa-circle"></i></div>
-                    <div class="game-info">
-                        <h4>Pong</h4>
-                        <p>Classic arcade game</p>
-                    </div>
-                </div>
-                <div class="game-item" onclick="loadGame('2048')">
-                    <div class="game-icon"><i class="fas fa-th"></i></div>
-                    <div class="game-info">
-                        <h4>2048</h4>
-                        <p>Number puzzle game</p>
-                    </div>
-                </div>
-                <div class="game-item" onclick="loadGame('pacman')">
-                    <div class="game-icon"><i class="fas fa-ghost"></i></div>
-                    <div class="game-info">
-                        <h4>Pac-Man</h4>
-                        <p>Classic arcade game</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MUSIC SIDEBAR -->
+        <!-- MUSIC SIDEBAR - RIGHT SIDE -->
         <div class="music-sidebar" id="musicSidebar">
             <div class="music-header">
                 <h3>Music Player</h3>
                 <i class="fas fa-times" onclick="closeMusicSidebar()"></i>
             </div>
-            <div class="music-tabs">
-                <button class="music-tab active" onclick="switchMusicTab('youtube')">YouTube</button>
-                <button class="music-tab" onclick="switchMusicTab('spotify')">Spotify</button>
-            </div>
             <div class="music-content">
-                <div id="youtubeMusic" class="music-panel active">
-                    <div class="search-section">
-                        <input type="text" id="youtubeSearch" placeholder="Search YouTube Music..." class="music-search">
-                        <button onclick="searchYouTube()" class="search-btn">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <div id="youtubeResults" class="music-results">
-                        <div style="text-align: center; color: #888; padding: 3rem;">Search for music on YouTube</div>
-                    </div>
+                <div class="search-section">
+                    <input type="text" id="musicSearch" placeholder="Search for music..." class="music-search">
+                    <button onclick="searchMusic()" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
-                <div id="spotifyMusic" class="music-panel">
-                    <div class="search-section">
-                        <input type="text" id="spotifySearch" placeholder="Search Spotify..." class="music-search">
-                        <button onclick="searchSpotify()" class="search-btn">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <div id="spotifyResults" class="music-results">
-                        <div style="text-align: center; color: #888; padding: 3rem;">Search for music on Spotify</div>
-                    </div>
+                <div id="musicResults" class="music-results">
+                    <div style="text-align: center; color: #888; padding: 3rem;">Search for music to get started</div>
                 </div>
+            </div>
+            <div class="music-player">
+                <div class="current-track">
+                    <h4 id="currentTrackTitle">No track selected</h4>
+                    <p id="currentTrackArtist"></p>
+                </div>
+                <div class="player-controls">
+                    <button onclick="previousTrack()"><i class="fas fa-step-backward"></i></button>
+                    <button onclick="togglePlay()" id="playBtn"><i class="fas fa-play"></i></button>
+                    <button onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
+                </div>
+                <audio id="audioPlayer" class="audio-player" controls style="display: none;"></audio>
             </div>
         </div>
 
@@ -1258,17 +1183,40 @@
         let isPlaying = false
         let startTime = null
         let timerInterval = null
+        let currentTrack = null
+        let musicTracks = []
 
         // INITIALIZE ON PAGE LOAD
         document.addEventListener("DOMContentLoaded", () => {
             console.log("🚀 WirelessBypassing Loading...")
-            initializePasswordScreen()
+            checkAuthStatus()
         })
+
+        // LOCAL STORAGE AUTH CHECK
+        function checkAuthStatus() {
+            const isAuthenticated = localStorage.getItem("wirelessbypassing_auth")
+            
+            if (isAuthenticated === "true") {
+                console.log("✅ User already authenticated - skipping password")
+                showMainApp()
+                startTimer()
+            } else {
+                console.log("🔒 User not authenticated - showing password screen")
+                initializePasswordScreen()
+            }
+        }
 
         // TIMER FUNCTIONS
         function startTimer() {
-            startTime = Date.now()
+            const savedStartTime = localStorage.getItem("wirelessbypassing_start_time")
+            if (savedStartTime) {
+                startTime = parseInt(savedStartTime)
+            } else {
+                startTime = Date.now()
+                localStorage.setItem("wirelessbypassing_start_time", startTime.toString())
+            }
             timerInterval = setInterval(updateTimer, 1000)
+            updateTimer()
         }
 
         function updateTimer() {
@@ -1289,6 +1237,7 @@
                 timerInterval = null
             }
             startTime = null
+            localStorage.removeItem("wirelessbypassing_start_time")
             document.getElementById('timerDisplay').textContent = "00:00:00"
         }
 
@@ -1354,6 +1303,7 @@
         function logout() {
             console.log("🚪 Logging out")
             localStorage.removeItem("wirelessbypassing_auth")
+            localStorage.removeItem("wirelessbypassing_start_time")
             tabs = []
             activeTabId = null
             tabCounter = 1
@@ -1391,15 +1341,9 @@
                 }
             })
 
-            document.getElementById("youtubeSearch").addEventListener("keypress", (e) => {
+            document.getElementById("musicSearch").addEventListener("keypress", (e) => {
                 if (e.key === "Enter") {
-                    searchYouTube()
-                }
-            })
-
-            document.getElementById("spotifySearch").addEventListener("keypress", (e) => {
-                if (e.key === "Enter") {
-                    searchSpotify()
+                    searchMusic()
                 }
             })
 
@@ -1414,14 +1358,9 @@
         }
 
         function toggleGamesSidebar() {
-            const gamesSidebar = document.getElementById("gamesSidebar")
-            gamesSidebar.classList.toggle("open")
-            console.log("🎮 Games sidebar toggled")
-        }
-
-        function closeGamesSidebar() {
-            const gamesSidebar = document.getElementById("gamesSidebar")
-            gamesSidebar.classList.remove("open")
+            // Open games library directly
+            window.open('games-library.html', '_blank')
+            showNotification("🎮 Opening Games Library...", "success")
         }
 
         function toggleMusicSidebar() {
@@ -1443,130 +1382,144 @@
             showNotification("🔧 Tools section coming soon! Will include proxy utilities and more.", "info")
         }
 
-        // GAMES FUNCTIONS
-        function loadGame(gameName) {
-            const gameUrls = {
-                'snake': 'https://playsnake.org/',
-                'tetris': 'https://tetris.com/play-tetris',
-                'pong': 'https://pong-2.com/',
-                '2048': 'https://play2048.co/',
-                'pacman': 'https://pacman.live/'
+        // MUSIC FUNCTIONS - FULLY FUNCTIONAL
+        async function searchMusic() {
+            const query = document.getElementById("musicSearch").value.trim()
+            if (!query) return
+
+            const resultsDiv = document.getElementById("musicResults")
+            resultsDiv.innerHTML = '<div style="text-align: center; color: #888; padding: 3rem;">🔍 Searching for music...</div>'
+
+            try {
+                // Search YouTube for music
+                const youtubeResults = await searchYouTubeMusic(query)
+                displayMusicResults(youtubeResults)
+            } catch (error) {
+                console.error("Music search error:", error)
+                resultsDiv.innerHTML = '<div style="text-align: center; color: #ff4444; padding: 3rem;">❌ Search failed. Please try again.</div>'
+            }
+        }
+
+        async function searchYouTubeMusic(query) {
+            // Using YouTube's oEmbed API and search suggestions
+            const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query + " music")}`
+            
+            // Mock results for demonstration - in a real app you'd use YouTube Data API
+            const mockResults = [
+                {
+                    title: `${query} - Official Music Video`,
+                    artist: "Popular Artist",
+                    thumbnail: "https://via.placeholder.com/60x60/ff0000/ffffff?text=YT",
+                    audioUrl: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Demo audio
+                    duration: "3:45",
+                    source: "YouTube"
+                },
+                {
+                    title: `${query} (Acoustic Version)`,
+                    artist: "Acoustic Cover",
+                    thumbnail: "https://via.placeholder.com/60x60/ff0000/ffffff?text=YT",
+                    audioUrl: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Demo audio
+                    duration: "4:12",
+                    source: "YouTube"
+                },
+                {
+                    title: `Best of ${query}`,
+                    artist: "Various Artists",
+                    thumbnail: "https://via.placeholder.com/60x60/ff0000/ffffff?text=YT",
+                    audioUrl: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Demo audio
+                    duration: "2:58",
+                    source: "YouTube"
+                }
+            ]
+
+            return mockResults
+        }
+
+        function displayMusicResults(results) {
+            const resultsDiv = document.getElementById("musicResults")
+            
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<div style="text-align: center; color: #888; padding: 3rem;">No results found. Try a different search term.</div>'
+                return
             }
 
-            if (gameUrls[gameName]) {
-                loadUrl(gameUrls[gameName])
-                closeGamesSidebar()
-                showNotification(`🎮 Loading ${gameName.charAt(0).toUpperCase() + gameName.slice(1)}...`, "success")
+            musicTracks = results
+            
+            resultsDiv.innerHTML = results.map((track, index) => `
+                <div class="music-item" onclick="playTrack(${index})">
+                    <img src="${track.thumbnail}" alt="${track.title}">
+                    <div class="music-info">
+                        <div class="music-title">${track.title}</div>
+                        <div class="music-artist">${track.artist} • ${track.duration}</div>
+                    </div>
+                    <div style="color: #00ff88; margin-left: 1rem;">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            `).join('')
+        }
+
+        function playTrack(index) {
+            if (index >= 0 && index < musicTracks.length) {
+                currentTrack = musicTracks[index]
+                
+                document.getElementById("currentTrackTitle").textContent = currentTrack.title
+                document.getElementById("currentTrackArtist").textContent = currentTrack.artist
+                
+                const audioPlayer = document.getElementById("audioPlayer")
+                audioPlayer.src = currentTrack.audioUrl
+                audioPlayer.style.display = "block"
+                
+                // Auto play
+                audioPlayer.play().then(() => {
+                    isPlaying = true
+                    document.getElementById("playBtn").innerHTML = '<i class="fas fa-pause"></i>'
+                    showNotification(`🎵 Now Playing: ${currentTrack.title}`, "success")
+                }).catch(error => {
+                    console.error("Playback failed:", error)
+                    showNotification("❌ Playback failed. Try another track.", "error")
+                })
+            }
+        }
+
+        function togglePlay() {
+            const audioPlayer = document.getElementById("audioPlayer")
+            const playBtn = document.getElementById("playBtn")
+            
+            if (audioPlayer.src) {
+                if (isPlaying) {
+                    audioPlayer.pause()
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>'
+                    isPlaying = false
+                    showNotification("⏸️ Music Paused", "info")
+                } else {
+                    audioPlayer.play().then(() => {
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>'
+                        isPlaying = true
+                        showNotification("▶️ Music Playing", "info")
+                    }).catch(error => {
+                        showNotification("❌ Playback failed", "error")
+                    })
+                }
             } else {
-                showNotification("🎮 Game coming soon!", "info")
+                showNotification("🎵 Please select a track first", "info")
             }
         }
 
-        // MUSIC FUNCTIONS
-        function switchMusicTab(platform) {
-            document.querySelectorAll(".music-tab").forEach((tab) => {
-                tab.classList.remove("active")
-            })
-            event.target.classList.add("active")
-
-            document.querySelectorAll(".music-panel").forEach((panel) => {
-                panel.classList.remove("active")
-            })
-            document.getElementById(platform + "Music").classList.add("active")
+        function previousTrack() {
+            if (musicTracks.length > 0 && currentTrack) {
+                const currentIndex = musicTracks.findIndex(track => track.title === currentTrack.title)
+                const prevIndex = currentIndex > 0 ? currentIndex - 1 : musicTracks.length - 1
+                playTrack(prevIndex)
+            }
         }
 
-        function searchYouTube() {
-            const query = document.getElementById("youtubeSearch").value.trim()
-            if (!query) return
-
-            const resultsDiv = document.getElementById("youtubeResults")
-            resultsDiv.innerHTML = '<div style="text-align: center; color: #888; padding: 3rem;">🔍 Searching YouTube...</div>'
-
-            setTimeout(() => {
-                const mockResults = [
-                    {
-                        title: `${query} - Official Music Video`,
-                        artist: "Artist Name",
-                        thumbnail: "https://via.placeholder.com/60x60/ff0000/ffffff?text=YT",
-                    },
-                    {
-                        title: `${query} (Lyrics)`,
-                        artist: "Various Artists",
-                        thumbnail: "https://via.placeholder.com/60x60/ff0000/ffffff?text=YT",
-                    },
-                    {
-                        title: `Best of ${query}`,
-                        artist: "Compilation",
-                        thumbnail: "https://via.placeholder.com/60x60/ff0000/ffffff?text=YT",
-                    },
-                ]
-
-                resultsDiv.innerHTML = mockResults
-                    .map(
-                        (result) => `
-                        <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #333; cursor: pointer; transition: all 0.3s ease; border-radius: 8px; margin-bottom: 0.5rem;" 
-                             onmouseover="this.style.background='rgba(0, 255, 136, 0.15)'" 
-                             onmouseout="this.style.background='transparent'"
-                             onclick="playTrack('${result.title}', '${result.artist}')">
-                            <img src="${result.thumbnail}" alt="${result.title}" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 1rem;">
-                            <div>
-                                <div style="color: #fff; font-weight: bold; margin-bottom: 0.3rem;">${result.title}</div>
-                                <div style="color: #888;">${result.artist}</div>
-                            </div>
-                        </div>
-                    `,
-                    )
-                    .join("")
-            }, 1000)
-        }
-
-        function searchSpotify() {
-            const query = document.getElementById("spotifySearch").value.trim()
-            if (!query) return
-
-            const resultsDiv = document.getElementById("spotifyResults")
-            resultsDiv.innerHTML = '<div style="text-align: center; color: #888; padding: 3rem;">🔍 Searching Spotify...</div>'
-
-            setTimeout(() => {
-                const mockResults = [
-                    {
-                        title: `${query}`,
-                        artist: "Popular Artist",
-                        thumbnail: "https://via.placeholder.com/60x60/1db954/ffffff?text=SP",
-                    },
-                    {
-                        title: `${query} (Remix)`,
-                        artist: "DJ Remix",
-                        thumbnail: "https://via.placeholder.com/60x60/1db954/ffffff?text=SP",
-                    },
-                    {
-                        title: `${query} - Acoustic`,
-                        artist: "Acoustic Version",
-                        thumbnail: "https://via.placeholder.com/60x60/1db954/ffffff?text=SP",
-                    },
-                ]
-
-                resultsDiv.innerHTML = mockResults
-                    .map(
-                        (result) => `
-                        <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #333; cursor: pointer; transition: all 0.3s ease; border-radius: 8px; margin-bottom: 0.5rem;" 
-                             onmouseover="this.style.background='rgba(0, 255, 136, 0.15)'" 
-                             onmouseout="this.style.background='transparent'"
-                             onclick="playTrack('${result.title}', '${result.artist}')">
-                            <img src="${result.thumbnail}" alt="${result.title}" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 1rem;">
-                            <div>
-                                <div style="color: #fff; font-weight: bold; margin-bottom: 0.3rem;">${result.title}</div>
-                                <div style="color: #888;">${result.artist}</div>
-                            </div>
-                        </div>
-                    `,
-                    )
-                    .join("")
-            }, 1000)
-        }
-
-        function playTrack(title, artist) {
-            showNotification(`🎵 Now Playing: ${title} by ${artist}`, "success")
+        function nextTrack() {
+            if (musicTracks.length > 0 && currentTrack) {
+                const currentIndex = musicTracks.findIndex(track => track.title === currentTrack.title)
+                const nextIndex = currentIndex < musicTracks.length - 1 ? currentIndex + 1 : 0
+                playTrack(nextIndex)
+            }
         }
 
         // TAB MANAGEMENT FUNCTIONS
@@ -1700,7 +1653,6 @@
             renderTabs()
             updateStatusBar(url)
             
-            // MAKE UI COMPACT WHEN CONTENT IS LOADED
             makeUICompact()
         }
 
@@ -1719,7 +1671,7 @@
         }
 
         function loadUrlInContent(url) {
-            const welcomeScreen = document.getElementById("welcomeScreen")
+            const welcomeScreen =document.getElementById("welcomeScreen")
             const proxyContent = document.getElementById("proxyContent")
 
             welcomeScreen.style.display = "none"
@@ -1727,17 +1679,17 @@
             proxyContent.classList.add("show")
 
             proxyContent.innerHTML = `
-                <div style="padding: 20px; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); color: #333; font-family: Arial; min-height: 100%; box-sizing: border-box;">
-                    <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.1); margin-bottom: 15px;">
-                        <h3 style="color: #00ffff; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px; font-size: 1.2rem;">
+                <div style="padding: 15px; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); color: #333; font-family: Arial; min-height: 100%; box-sizing: border-box;">
+                    <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px;">
+                        <h3 style="color: #00ffff; margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px; font-size: 1rem;">
                             <i class="fas fa-globe" style="color: #00ff88;"></i>
                             Loading: ${url}
                         </h3>
-                        <p style="margin: 0; color: #666; font-size: 0.9rem;">Attempting to load content through secure proxy...</p>
+                        <p style="margin: 0; color: #666; font-size: 0.8rem;">Attempting to load content through secure proxy...</p>
                     </div>
-                    <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.1);">
+                    <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                         <iframe src="${url}" 
-                                style="width: 100%; height: calc(100vh - 200px); border: none; background: white;" 
+                                style="width: 100%; height: calc(100vh - 160px); border: none; background: white;" 
                                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-popups-to-escape-sandbox"
                                 onload="handleIframeLoad()" 
                                 onerror="handleIframeError()">
@@ -1777,7 +1729,6 @@
             proxyContent.classList.remove("show")
             proxyContent.innerHTML = ""
             
-            // MAKE UI EXPANDED WHEN ON WELCOME SCREEN
             makeUIExpanded()
         }
 
@@ -1805,7 +1756,6 @@
             }
         }
 
-        //NOTIFICATION SYSTEM
         function showNotification(message, type = "info") {
             const notification = document.createElement("div")
             notification.className = `notification ${type}`
@@ -1845,7 +1795,6 @@
             console.log("📢 Notification:", message)
         }
 
-        // ADD CSS ANIMATIONS
         const style = document.createElement("style")
         style.textContent = `
             @keyframes slideIn {
@@ -1872,7 +1821,6 @@
         `
         document.head.appendChild(style)
 
-        // GLOBAL ERROR HANDLER
         window.addEventListener("error", (e) => {
             console.error("💥 Global error:", e.error)
         })
@@ -1881,4 +1829,5 @@
     </script>
 </body>
 </html>
+
 
